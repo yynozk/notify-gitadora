@@ -57,9 +57,12 @@ def handler(event, content):
     names = {k for s in skills.values() for k in s.keys()}
     strs = [datetime.now().strftime("%Y/%m/%d")]
     for n in names:
-        gf = skills['gf'][n]
-        dm = skills['dm'][n]
-        str = "**{}:** {:04.2f} (GF = {:04.2f}, DM = {:04.2f})".format(n, gf+dm, gf, dm)
+        gf = skills['gf'].get(n, 0)
+        dm = skills['dm'].get(n, 0)
+        if n in {'chilopod'}:
+            str = "**{}:** {:04.2f} = {:04.2f} * 5 (GF = {:04.2f}, DM = {:04.2f})".format(n, (gf+dm)*5, gf+dm, gf, dm)
+        else:
+            str = "**{}:** {:04.2f} (GF = {:04.2f}, DM = {:04.2f})".format(n, gf+dm, gf, dm)
         strs.append(str)
 
     body = {"content": "\n".join(strs)}
